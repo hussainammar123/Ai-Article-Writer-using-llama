@@ -1,4 +1,4 @@
-
+#AI ARTICLE WRITER
 📝 AI Article Writer (Using Ollama + Flask)
 A lightweight, fast, and locally hosted AI Article Generator Web App that uses LLaMA models via Ollama and a Flask backend to generate high-quality articles from simple user prompts — with no cloud dependency.
 
@@ -52,9 +52,7 @@ Edit
 ollama pull llama2:7b-chat
 ollama serve
 4. Start the Flask server
-bash
-Copy
-Edit
+
 python app.py
 Open your browser and go to: http://127.0.0.1:5000
 
@@ -102,6 +100,4 @@ Meta AI (LLaMA) – for powerful open-source models
 
 Flask – simple and powerful Python web framework
 
-📄 License
-This project is licensed under the MIT License.
-Feel free to use, modify, and distribute.
+.
