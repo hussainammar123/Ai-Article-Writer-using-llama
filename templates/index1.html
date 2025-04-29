@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+  <title>AI Article Writer</title>
+  <style>
+    /* (Your CSS is great - only minor cleanups below) */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #111; /* Dark theme */
+      color: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('/static/articles_background.png'); /* Your dark articles background */
+      background-size: cover;
+      background-position: center;
+    }
+    header {
+      width: 100%;
+      padding: 20px;
+      background: #333;
+      color: rgb(230, 193, 193);
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    main {
+      width: 60%;
+      max-width: 800px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    label, input, button, textarea {
+      width: 100%;
+      margin: 10px 0;
+    }
+    input, textarea {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #555;
+      border-radius: 5px;
+      background: #222;
+      color: white;
+    }
+    button {
+      padding: 15px;
+      font-size: 18px;
+      background-color: #5D6D7E;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    button:hover {
+      background-color: #34495E;
+    }
+    .loader {
+      display: none;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #5D6D7E;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 2s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    footer {
+      width: 100%;
+      padding: 20px;
+      background: #333;
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AI Article Writer</h1>
+</header>
+
+<main>
+  <label for="description">Topic or Description:</label>
+  <textarea id="description" placeholder="Enter your topic or description..."></textarea>
+  
+  <button onclick="generateArticle()">Generate Article</button>
+
+  <div id="loader" class="loader"></div>
+
+  <label for="generatedArticle">Generated Article:</label>
+  <textarea id="generatedArticle" rows="10" readonly></textarea>
+</main>
+
+<footer>
+  <p>DESCRIPTION:   This project is a lightweight AI-powered article generation web application built using Flask for the backend and a locally hosted LLaMA model for text generation.
+        Users can simply enter a topic or prompt, and the AI quickly generates a detailed, high-quality article based on the input.
+    
+    </p>
+</footer>
+
+<script>
+  async function generateArticle() {
+    const description = document.getElementById('description').value.trim();
+    
+    if (!description) {
+      alert('Please enter a description.');
+      return;
+    }
+
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('generatedArticle').value = '⏳ Generating your article... Please wait...';
+
+
+    try {
+      const response = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ description: description })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        document.getElementById('generatedArticle').value = result.generated_article;
+      } else {
+        alert('Error: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while generating the article.');
+    } finally {
+      document.getElementById('loader').style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
